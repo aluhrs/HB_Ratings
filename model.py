@@ -1,7 +1,10 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, DateTime
-from datetime import datetime
+from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy.orm import sessionmaker
+
+ENGINE = None
+Session = None
 
 Base = declarative_base()
 engine = create_engine("sqlite:///ratings.db", echo=True)
@@ -23,7 +26,7 @@ class Movies(Base):
 
     id = Column(Integer, primary_key = True)
     name = Column(String(64), nullable=True)
-    released_at = Column(DateTime, nullable=True)
+    released_at = Column(Date, nullable=True)
     imdb_url = Column(String(100), nullable=True)
 
 class Ratings(Base):
@@ -37,6 +40,16 @@ class Ratings(Base):
         
 
 ### End class declarations
+# to connect to your database type sessions = connect() in python -i model.py
+def connect():
+    global ENGINE
+    global Session
+
+    ENGINE = create_engine("sqlite:///ratings.db", echo=True)
+    Session = sessionmaker(bind=ENGINE)
+
+    return Session()
+
 
 def main():
     """In case we need this for something"""
