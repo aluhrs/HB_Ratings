@@ -1,15 +1,25 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Date
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship, backref
 
 ENGINE = None
 Session = None
 
-Base = declarative_base()
-engine = create_engine("sqlite:///ratings.db", echo=True)
-# Call this below from python -i model.py when creating the tables
+# To create the tables from scratch change echo to True in engine
+# and call this below from python -i model.py 
 # Base.metadata.create_all(engine)
+
+engine = create_engine("sqlite:///ratings.db", echo=False)
+session = scoped_session(sessionmaker(bind=engine, autocommit = False, 
+                                        autoflush = False))
+
+
+Base = declarative_base()
+Base.query = session.query_property()
+
 
 ### Class declarations go here
 class User(Base):
@@ -33,10 +43,18 @@ class Ratings(Base):
     __tablename__ = "ratings"
 
     id = Column(Integer, primary_key = True)
-    movie_id = Column(Integer, nullable = True)
-    user_id = Column(Integer, nullable = True)
-    rating = Column(Integer, nullable = True)
+    # ForeignKey is describing the relationship between the movie_id in the ratings table
+    # and the id in the movies table
+    movie_id = Column(Integer, ForeignKey('movies.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    rating = Column(Integer, nullable=True)
     
+    # relationship is adding an attribute to the object 
+    # so below, user is the child (or children) to Ratings. 
+    user = relationship("User",
+            backref=backref("ratings", order_by=id))
+    movie = relationship("Movies",
+            backref=backref("ratings", order_by=id))
         
 
 ### End class declarations
