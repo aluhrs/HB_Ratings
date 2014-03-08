@@ -59,14 +59,22 @@ class Ratings(Base):
 
 ### End class declarations
 # to connect to your database type sessions = connect() in python -i model.py
-def connect():
-    global ENGINE
-    global Session
 
-    ENGINE = create_engine("sqlite:///ratings.db", echo=True)
-    Session = sessionmaker(bind=ENGINE)
+def authenticate(username, password):
+    authentication = session.query(User).filter_by(email = username,
+                                            password = password).all()
+    # print authentication
+    if authentication == []:
+        print "NO USER"
+        
+# def connect():
+#     global ENGINE
+#     global Session
 
-    return Session()
+#     ENGINE = create_engine("sqlite:///ratings.db", echo=True)
+#     Session = sessionmaker(bind=ENGINE)
+
+#     return Session()
 
 
 def main():
