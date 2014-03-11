@@ -1,0 +1,13 @@
+{% extends 'master.html' %}
+
+{% block body %}
+   <h1>Click on a movie to view our prediction for your rating</h1>
+    {% for movie in movies %}
+    <p><a href="{{url_for("view_movie", movieid=movie.id)}}">{{ movie.name }}</a>
+    {% endfor %}
+    <p>
+        <a href="/close">Click Here to Log Out</a>
+    </p>
+
+
+{% endblock %}

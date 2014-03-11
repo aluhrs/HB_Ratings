@@ -1,0 +1,13 @@
+{% extends 'master.html' %}
+
+{% block body %}
+
+{% if prediction %}
+<h3>We predict you will rate this movie {{prediction}}. </h3>
+{% else %}
+<h3>Please rate more movies to get an accurate prediction</h3>
+{% endif %}
+<p>
+    <a href="/close">Click Here to Log Out</a>
+</p>
+{% endblock %}

@@ -87,7 +87,8 @@ def rateMovie(movieid):
             user = model.session.query(model.User).filter_by(email = session['username']).one()
             user_id = user.id
             current_rating = model.session.query(model.Rating).filter_by(user_id = user.id, movie_id = movieid).all()
-            return render_template("ratemovie.html", movie_rating=current_rating[0].rating, movie=movie_name, userid = user_id)
+            print current_rating
+            return render_template("ratemovie.html", movie_rating=current_rating, movie=movie_name, userid = user_id)
     except KeyError:
         flash("You must be logged in to rate a movie. Please log in or create an account.")
         return redirect(url_for("index"))
@@ -112,11 +113,35 @@ def rate_movie_DB(movieid):
     # commit the user to the database
         model.session.commit()
         return "User %s rated movie id %s a %s. Your new rating is %s" % (user_id, movieid, current_rating[0].rating, rating)
-        # udpate the db
-    # else
-        # insert into the db
+
+@app.route("/movies")
+def movies():
+    movies = model.session.query(model.Movie).limit(5).all()
+    return render_template("movies.html", movies=movies)
+
+@app.route("/movie/<movieid>")
+def view_movie(movieid):
+    movie = model.session.query(model.Movie).get(movieid)
+    ratings = movie.ratings
+    rating_nums = []
+    user_rating = None
+    user = model.session.query(model.User).filter_by(email = session['username']).one()
+    user_id = user.id
+    for r in ratings:
+        if r.user_id == user.id:
+            user_rating = r
+        rating_nums.append(r.rating)
+    avg_rating = float(sum(rating_nums))/len(rating_nums)
+
+    u = model.session.query(model.User).get(user_id)
+    prediction = None
+    if not user_rating:
+        prediction = u.predict_rating(movie)
+
+    return render_template("movie.html", movie=movie, average=avg_rating, user_rating=user_rating, prediction=prediction)
+
     
-    return "Ya" 
+
 
 
 @app.route("/directory/<username>")

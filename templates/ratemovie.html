@@ -4,7 +4,7 @@
 <!-- movie = movie_name, user_email=session['username'] -->
 <h1>How would you rate {{movie.name}}?</h1>
 {% if movie_rating %}
-    <p> This is the rating you have given for {{movie.name}}: {{movie_rating}}</p>
+    <p> This is the rating you have given for {{movie.name}}: {{movie_rating[0].rating}}</p>
     <p> To edit the rating use the form below </p>
 {% else %}
     <p> You have not yet rated this movie. Create a rating for this movie using the form below! </p>
