@@ -49,7 +49,7 @@ def load_movies(session):
             # set the release date to datetime
             release_date = datetime.datetime.strptime(release_date, "%d-%b-%Y")
             # create the object
-            m = model.Movies(id=id, name=title, released_at=release_date, 
+            m = model.Movie(id=id, name=title, released_at=release_date, 
                                 imdb_url=imdb)
             # add to the session
             session.add(m)
@@ -72,7 +72,7 @@ def load_ratings(session):
             
             # create the object
 
-            r = model.Ratings(user_id=user_id, movie_id=movie_id, rating=rating)
+            r = model.Rating(user_id=user_id, movie_id=movie_id, rating=rating)
             session.add(r)
         session.commit()
         print "The ratings have been added"

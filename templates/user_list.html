@@ -1,6 +1,12 @@
-<html>
+{% extends 'master.html' %}
+
+{% block body %}
+    <h1>Click on a user to view their ratings</h1>
     {% for user in users %}
-    <h2>User {{ user.id }}, age {{ user.age }} has 
-        {{ user.ratings|length}} ratings</h2>
+    <p><a href="{{url_for("ratings", userid=user.id)}}">User {{ user.id }}</a>, age {{ user.age }} has 
+        {{ user.ratings|length}} ratings</p>
     {% endfor %}
-</html>
+    <p>
+        <a href="/close">Click Here to Log Out</a>
+    </p>
+{% endblock %}

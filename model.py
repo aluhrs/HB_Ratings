@@ -31,7 +31,7 @@ class User(Base):
     age = Column(Integer, nullable=True)
     zipcode = Column(String(15), nullable=True)
 
-class Movies(Base):
+class Movie(Base):
     __tablename__ = "movies"
 
     id = Column(Integer, primary_key = True)
@@ -39,7 +39,7 @@ class Movies(Base):
     released_at = Column(Date, nullable=True)
     imdb_url = Column(String(100), nullable=True)
 
-class Ratings(Base):
+class Rating(Base):
     __tablename__ = "ratings"
 
     id = Column(Integer, primary_key = True)
@@ -53,7 +53,7 @@ class Ratings(Base):
     # so below, user is the child (or children) to Ratings. 
     user = relationship("User",
             backref=backref("ratings", order_by=id))
-    movie = relationship("Movies",
+    movie = relationship("Movie",
             backref=backref("ratings", order_by=id))
         
 
@@ -65,7 +65,17 @@ def authenticate(username, password):
                                             password = password).all()
     # print authentication
     if authentication == []:
-        print "NO USER"
+        return False
+    else:
+        return True
+
+def create_user(username, password):
+    # create a new instance of the user class
+    u = User(email=username, password=password)
+    # add the user
+    session.add(u)
+    # commit the user to the database
+    session.commit()
         
 # def connect():
 #     global ENGINE

@@ -1,0 +1,21 @@
+{% extends 'master.html' %}
+
+{% block body %}
+<!-- movie = movie_name, user_email=session['username'] -->
+<h1>How would you rate {{movie.name}}?</h1>
+{% if movie_rating %}
+    <p> This is the rating you have given for {{movie.name}}: {{movie_rating}}</p>
+    <p> To edit the rating use the form below </p>
+{% else %}
+    <p> You have not yet rated this movie. Create a rating for this movie using the form below! </p>
+{% endif %}
+    <div class="container">
+        <form class="signin" method="POST">
+            <h2 class"signin-heading">Rate this movie</h2>
+            <input type="text" class="form-control" placeholder="enter a rating from 1 to 5" name="create_rating">
+            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit" id="create" name="action">
+        </form>
+    </div>
+    
+
+{% endblock %}
